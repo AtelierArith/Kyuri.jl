@@ -4,7 +4,7 @@ CurrentModule = Kyuri
 
 # Kyuri
 
-Documentation for [Kyuri](https://github.com/terasakisatoshi/Kyuri.jl).
+Documentation for [Kyuri](https://github.com/AtelierArith/Kyuri.jl).
 
 ```@index
 ```
