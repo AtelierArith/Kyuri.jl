@@ -8,6 +8,7 @@ from importlib import metadata
 import isort
 
 import quri_parts
+import quri_parts.backend
 import quri_parts.core
 import quri_parts.core.circuit
 import quri_parts.core.estimator
@@ -44,6 +45,7 @@ def print_pymod_api(pymod, level=0):
             continue
         if inspect.isclass(attr):
             if isort.place_module(attr.__module__) == "STDLIB":
+                # ignore Python classes that are provided by some Python standard libraries
                 continue
             if attr.__module__ != pymod_name:
                 alias_classes.append(
@@ -53,6 +55,7 @@ def print_pymod_api(pymod, level=0):
             classes.append(attr_str)
         if inspect.isfunction(attr):
             if isort.place_module(attr.__module__) == "STDLIB":
+                # ignore Python functions that are provided by some Python standard libraries
                 continue
             if attr.__module__ != pymod_name:
                 alias_functions.append(
@@ -88,8 +91,10 @@ def print_module(pymod="quri_parts", level=0):
             indent = 4 * level * WHITE_SPACE
             pymod_name = attr.__name__
             if level + 1 > MAX_NEXT_LEVEL:
+                # do not take a deep dive on python module too much.
                 continue
             if pymod_name in ["numpy"]:
+                # do not study third party libraries other than quri_parts
                 continue
             print(indent + f"# --- print-module-{attr.__name__} ---")
             print_module(pymod=pymod_name, level=level + 1)
