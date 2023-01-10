@@ -1,12 +1,10 @@
-"""
-
-This is a python script to show API for each submodules of quri_parts
-
-"""
+# %%
+import importlib
 from importlib import metadata
-
+import inspect
 import isort
 
+# %%
 import quri_parts
 import quri_parts.core
 import quri_parts.core.circuit
@@ -20,13 +18,43 @@ import quri_parts.core.sampling
 import quri_parts.core.state
 import quri_parts.core.utils
 
+# %%
+from dataclasses import dataclass
+
+# %%
+from quri_parts.circuit.clifford_gate import is_clifford
+
+# %%
+is_clifford.__module__
+
+# %%
+from quri_parts.core.operator.pauli import PauliLabel
+
+PauliLabel.__module__
+
+# %%
+from quri_parts.core.measurement.interface import PauliLabel
+
+PauliLabel.__module__
+
+# %%
+isort.place_module(is_clifford.__module__)
+
+# %%
+isort.place_module(dataclass.__module__) == "STDLIB"
+
+# %%
+metadata.distribution("qulacs").version
+
+# %%
+metadata.distribution("quri_parts").version
+
+# %%
 WHITE_SPACE = " "
 MAX_NEXT_LEVEL = 3
 
-import importlib
-import inspect
 
-
+# %%
 def print_pymod_api(pymod, level=0):
     if isinstance(pymod, str):
         pymod = importlib.import_module(f"{pymod}")
@@ -76,6 +104,11 @@ def print_pymod_api(pymod, level=0):
         print()
 
 
+# %%
+print_pymod_api("quri_parts.core.operator.pauli")
+
+
+# %%
 def print_module(pymod="quri_parts", level=0):
     if isinstance(pymod, str):
         pymod = importlib.import_module(f"{pymod}")
@@ -96,5 +129,16 @@ def print_module(pymod="quri_parts", level=0):
             print_pymod_api(pymod=pymod_name, level=level + 1)
 
 
+# %%
 def print_all():
     print_module(pymod=quri_parts)
+
+
+# %%
+print_all()
+
+# %%
+
+# %%
+
+# %%
