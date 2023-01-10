@@ -39,9 +39,8 @@ def print_pymod_api(pymod, level=0):
     alias_functions = []
     for attr_str in sorted(pymod.__dir__()):
         attr = getattr(pymod, attr_str)
-        if inspect.ismodule(attr):
-            continue
         if attr_str.startswith("_"):
+            # do not include private objects
             continue
         if inspect.isclass(attr):
             if isort.place_module(attr.__module__) == "STDLIB":
