@@ -3,10 +3,11 @@
 This is a python script to show API for each submodules of quri_parts
 
 """
+import importlib
+import inspect
 from importlib import metadata
 
 import isort
-
 import quri_parts
 import quri_parts.backend
 import quri_parts.core
@@ -23,9 +24,6 @@ import quri_parts.core.utils
 
 WHITE_SPACE = " "
 MAX_NEXT_LEVEL = 3
-
-import importlib
-import inspect
 
 
 def print_pymod_api(pymod, level=0):
