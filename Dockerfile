@@ -1,4 +1,4 @@
-FROM julia:1.8.5
+FROM julia:1.8.4
 
 # create user with a home directory
 ARG NB_USER=jovyan
