@@ -1,5 +1,28 @@
-using Kyuri
+using Markdown
 using Documenter
+import Documenter.Utilities.MDFlatten: mdflatten
+
+using Kyuri
+using Kyuri: LazyHelp
+
+function Documenter.Writers.HTMLWriter.mdconvert(
+    h::LazyHelp,
+    parent;
+    kwargs...,
+)
+    s = Kyuri.gendocstr(h)
+    # quote docstring `s` to prevent changing display result
+    m = Markdown.parse(
+        """
+        ```
+        $s
+        ```
+        """,
+    )
+    Documenter.Writers.HTMLWriter.mdconvert(m, parent; kwargs...)
+end
+
+mdflatten(io::IOBuffer, h::LazyHelp, md::Markdown.MD) = nothing
 
 DocMeta.setdocmeta!(Kyuri, :DocTestSetup, :(using Kyuri); recursive=true)
 
