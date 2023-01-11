@@ -5,9 +5,11 @@ This is a python script to show API for each submodules of quri_parts
 """
 import importlib
 import inspect
+import os
 from importlib import metadata
 
 import isort
+
 import quri_parts
 import quri_parts.backend
 import quri_parts.core
@@ -26,7 +28,7 @@ WHITE_SPACE = " "
 MAX_NEXT_LEVEL = 3
 
 
-def print_pymod_api(pymod, level=0):
+def collect_target_objects(pymod):
     if isinstance(pymod, str):
         pymod = importlib.import_module(f"{pymod}")
 
@@ -60,20 +62,49 @@ def print_pymod_api(pymod, level=0):
                 )
                 continue
             functions.append(attr_str)
+    return dict(
+        functions=functions,
+        alias_functions=alias_functions,
+        classes=classes,
+        alias_classes=alias_classes,
+    )
 
+
+def print_pymod_api(pymod, level=0):
+    if isinstance(pymod, str):
+        pymod = importlib.import_module(f"{pymod}")
+    pymod_name = pymod.__name__
+    ret = collect_target_objects(pymod)
     indent = 4 * level * WHITE_SPACE
     print(indent + f"# --- {pymod_name} ---")
-    for (objs, obj_name) in [
-        (classes, "classes"),
-        (functions, "functions"),
-        (alias_classes, "alias_classes"),
-        (alias_functions, "alias_functions"),
-    ]:
+    for (obj_name, objs) in ret.items():
         print(indent + f"const {pymod_name}_{obj_name} = [")
         for c in objs:
             print(indent + 4 * WHITE_SPACE + ":" + c + ",")
         print(indent + "]")
         print()
+
+
+def write_pymod_api(pymod):
+    if isinstance(pymod, str):
+        pymod = importlib.import_module(f"{pymod}")
+    pymod_name = pymod.__name__
+    pymod_name_base = pymod_name.split(".")[-1]
+    filename_base = pymod_name.replace(".", "/")
+    print(pymod_name)
+    ret = collect_target_objects(pymod)
+    print(f"# --- {pymod_name} ---")
+    for (obj_name, objs) in ret.items():
+        jlfile_name = os.path.join(
+            filename_base, pymod_name_base + "_" + obj_name + ".jl"
+        )
+        os.makedirs(filename_base, exist_ok=True)
+        with open(jlfile_name, "w") as f:
+            f.write(f"# --- {filename_base}_{obj_name}.jl\n")
+            f.write(f"const {pymod_name_base}_{obj_name} = [\n")
+            for c in objs:
+                f.write(4 * WHITE_SPACE + ":" + c + ",\n")
+            f.write("]\n")
 
 
 def print_module(pymod="quri_parts", level=0):
@@ -88,10 +119,8 @@ def print_module(pymod="quri_parts", level=0):
             indent = 4 * level * WHITE_SPACE
             pymod_name = attr.__name__
             if level + 1 > MAX_NEXT_LEVEL:
-                # do not take a deep dive on python module too much.
                 continue
             if pymod_name in ["numpy"]:
-                # do not study third party libraries other than quri_parts
                 continue
             print(indent + f"# --- print-module-{attr.__name__} ---")
             print_module(pymod=pymod_name, level=level + 1)
@@ -100,3 +129,22 @@ def print_module(pymod="quri_parts", level=0):
 
 def print_all():
     print_module(pymod=quri_parts)
+
+
+def generate_api(pymod="quri_parts", level=0):
+    if isinstance(pymod, str):
+        pymod = importlib.import_module(f"{pymod}")
+    for attr_str in sorted(pymod.__dir__()):
+        attr = getattr(pymod, attr_str)
+        if inspect.ismodule(attr):
+            if isort.place_module(attr.__name__) == "STDLIB":
+                # "ignore standard lib e.g. `re`
+                continue
+            indent = 4 * level * WHITE_SPACE
+            pymod_name = attr.__name__
+            if level + 1 > MAX_NEXT_LEVEL:
+                continue
+            if pymod_name in ["numpy"]:
+                continue
+            generate_api(pymod=pymod_name, level=level + 1)
+            write_pymod_api(pymod=pymod_name)
