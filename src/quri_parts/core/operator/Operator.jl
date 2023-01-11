@@ -11,8 +11,8 @@ const operator = PyNULL()
 # submodules
 include("pauli/Pauli.jl")
 # alias
-@reexport using .Pauli: PauliLabel
-@reexport using .Pauli: SinglePauli
+@reexport using .Pauli: PauliLabel, SinglePauli
+@reexport using .Pauli: pauli_label, pauli_name, pauli_product
 
 # attributes
 include("operator_functions.jl")
