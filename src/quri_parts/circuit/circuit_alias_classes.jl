@@ -1,0 +1,22 @@
+# --- quri_parts/circuit_alias_classes.jl
+const circuit_alias_classes = [
+    :ImmutableBoundParametricQuantumCircuit => "quri_parts.circuit.circuit_parametric",
+    :ImmutableLinearMappedUnboundParametricQuantumCircuit => "quri_parts.circuit.circuit_linear_mapped",
+    :ImmutableQuantumCircuit => "quri_parts.circuit.circuit",
+    :ImmutableUnboundParametricQuantumCircuit => "quri_parts.circuit.circuit_parametric",
+    :LinearMappedUnboundParametricQuantumCircuit => "quri_parts.circuit.circuit_linear_mapped",
+    :LinearMappedUnboundParametricQuantumCircuitBase => "quri_parts.circuit.circuit_linear_mapped",
+    :LinearParameterMapping => "quri_parts.circuit.parameter_mapping",
+    :MutableQuantumCircuitProtocol => "quri_parts.circuit.circuit",
+    :MutableUnboundParametricQuantumCircuitProtocol => "quri_parts.circuit.circuit_parametric",
+    :NonParametricQuantumCircuit => "quri_parts.circuit.circuit",
+    :Parameter => "quri_parts.circuit.circuit_parametric",
+    :ParameterMapping => "quri_parts.circuit.parameter_mapping",
+    :ParametricQuantumGate => "quri_parts.circuit.gate",
+    :QuantumCircuit => "quri_parts.circuit.circuit",
+    :QuantumCircuitProtocol => "quri_parts.circuit.circuit",
+    :QuantumGate => "quri_parts.circuit.gate",
+    :UnboundParametricQuantumCircuit => "quri_parts.circuit.circuit_parametric",
+    :UnboundParametricQuantumCircuitBase => "quri_parts.circuit.circuit_parametric",
+    :UnboundParametricQuantumCircuitProtocol => "quri_parts.circuit.circuit_parametric",
+]
