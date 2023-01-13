@@ -4,7 +4,7 @@
 
 This is an unofficial julia interface for [quri-parts](https://quri-parts.qunasys.com/).
 
-Extending the software methodology of Kyulacs.jl, we wondered if we could create a wrapper for complex projects. 80 percent of what we had planned was successful, but the remaining 20 percent (which included critical requirements) is not easy than we expected. Therefore, the reader should note that the current implementation does not provide comfortable software for us.
+Extending the software methodology used in [Kyulacs.jl](https://github.com/AtelierArith/Kyulacs.jl), we wondered if we could create a wrapper for complex projects. 80 percent of what we had planned was successful, but the remaining 20 percent (which included critical requirements) is not easy than we expected. Therefore, the reader should note that the current implementation does not provide comfortable software for us.
 
 # How to use
 
@@ -25,7 +25,7 @@ julia> using Kyuri.core.operator
 julia> label = pauli_label("X0 Y2 Z4")
 ```
 
-# How do we generate files located under `src/quri_parts`?
+## How do we generate files located under `src/quri_parts`?
 
 Most files located under `src/quri_parts/` are generated automatically using `src/gen_quri_parts_api.py`.
 
