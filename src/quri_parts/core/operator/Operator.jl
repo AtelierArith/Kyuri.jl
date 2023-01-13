@@ -8,11 +8,9 @@ import ..@pyclass
 
 const operator = PyNULL()
 
-# submodules
-include("pauli/Pauli.jl")
-# alias
-@reexport using .Pauli: PauliLabel, SinglePauli
-@reexport using .Pauli: pauli_label, pauli_name, pauli_product
+@static if isfile("operator_custom.jl")
+    include("operator_custom.jl")
+end
 
 # attributes
 include("operator_functions.jl")
