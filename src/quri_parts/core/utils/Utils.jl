@@ -11,8 +11,6 @@ const utils = PyNULL()
 # submodules
 
 
-include("array/Array.jl")
-
 include("bit/Bit.jl")
 
 include("statistics/Statistics.jl")
