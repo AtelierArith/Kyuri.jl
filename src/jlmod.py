@@ -52,8 +52,10 @@ for func in {{pymod_base}}_functions
     end
 end
 
-function __init__()
-    copy!(pymod_{{pymod_base}}, pyimport("{{pymod}}"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_{{pymod_base}}, pyimport("{{pymod}}"))
+    end
 end
 
 end
