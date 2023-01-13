@@ -1,4 +1,4 @@
-module circuit
+module _circuit
 
 using PyCall
 using Reexport

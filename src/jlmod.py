@@ -82,9 +82,11 @@ def write_jlmod(pymod):
             submod_base = submod_name.split(".")[-1]
             jlmod_file = submod_base + ".jl"
             if submod_name == "quri_parts.core.operator.operator":
-                jlmod_file = "_Operator.jl"
+                jlmod_file = "_operator.jl"
             if submod_name == "quri_parts.core.state.state":
-                jlmod_file = "_State.jl"
+                jlmod_file = "_state.jl"
+            if submod_name == "quri_parts.circuit.circuit":
+                jlmod_file = "_circuit.jl"
             jl_submodules.append(submod_base + "/" + jlmod_file)
 
     pymod_name = pymod.__name__
@@ -93,6 +95,8 @@ def write_jlmod(pymod):
         jlmod_name = "_operator"
     if pymod_name == "quri_parts.core.state.state":
         jlmod_name = "_state"
+    if pymod_name == "quri_parts.circuit.circuit":
+        jlmod_name = "_circuit"
     filename_base = Path(pymod_name.replace(".", "/"))
     os.makedirs(filename_base, exist_ok=True)
     jlmod_file_path = filename_base.joinpath(filename_base.stem + ".jl")
@@ -101,7 +105,8 @@ def write_jlmod(pymod):
         jlmod_file_path = "quri_parts/core/operator/operator/_operator.jl"
     if str(jlmod_file_path) == "quri_parts/core/state/state/state.jl":
         jlmod_file_path = "quri_parts/core/state/state/_state.jl"
-
+    if str(jlmod_file_path) == "quri_parts/circuit/circuit/circuit.jl":
+        jlmod_file_path = "quri_parts/circuit/circuit/_circuit.jl"
     with open(jlmod_file_path, "w") as f:
         template = Template(source=source)
         rendered_txt = template.render(

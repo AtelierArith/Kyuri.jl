@@ -13,7 +13,7 @@ const pymod_state = PyNULL()
 
 include("comp_basis/comp_basis.jl")
 
-include("state/_State.jl")
+include("state/_state.jl")
 
 include("state_parametric/state_parametric.jl")
 
