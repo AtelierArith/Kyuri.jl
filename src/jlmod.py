@@ -66,9 +66,10 @@ def write_jlmod(pymod):
                 continue
             if submod_name.split(".")[0] in ["numpy", "array"]:
                 continue
+            if submod_name.split(".")[-1] in ["numpy", "array"]:
+                continue
             if submod_name.split(".")[:-1] != pymod.__name__.split("."):
                 # avoid loading alias
-                print(f"goma {submod_name.split('.')[:-1]=}, {pymod.__name__=}")
                 continue
             submod_base = submod_name.split(".")[-1]
             jlmod_file = submod_base.capitalize() + ".jl"

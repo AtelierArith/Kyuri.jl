@@ -125,7 +125,7 @@ def print_module(pymod="quri_parts", level=0):
             submod_name = attr.__name__
             if level + 1 > MAX_NEXT_LEVEL:
                 continue
-            if submod_name.split(".")[0] in ["numpy", "array"]:
+            if submod_name.split(".")[-1] in ["numpy", "array"]:
                 continue
             print(indent + f"# --- print-module-{attr.__name__} ---")
             print_module(pymod=submod_name, level=level + 1)
@@ -150,6 +150,8 @@ def generate_api(pymod="quri_parts", level=0):
             if level + 1 > MAX_NEXT_LEVEL:
                 continue
             if submod_name.split(".")[0] in ["numpy", "array"]:
+                continue
+            if submod_name.split(".")[-1] in ["numpy", "array"]:
                 continue
             generate_api(pymod=submod_name, level=level + 1)
             write_pymod_api(pymod=submod_name)
