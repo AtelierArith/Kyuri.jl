@@ -1,4 +1,4 @@
-module Interface
+module interface
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const interface = PyNULL()
+const pymod_interface = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("interface_classes.jl")
 for class in interface_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass interface $(class)
+        @pyclass pymod_interface $(class)
         export $(class)
     end
 end
@@ -35,13 +35,13 @@ end
 for func in interface_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc interface $(func)
+        @pyfunc pymod_interface $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(interface, pyimport("quri_parts.core.measurement.interface"))
+    copy!(pymod_interface, pyimport("quri_parts.core.measurement.interface"))
 end
 
 end

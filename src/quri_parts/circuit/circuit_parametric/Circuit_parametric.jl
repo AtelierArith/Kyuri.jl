@@ -1,4 +1,4 @@
-module Circuit_parametric
+module circuit_parametric
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const circuit_parametric = PyNULL()
+const pymod_circuit_parametric = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("circuit_parametric_classes.jl")
 for class in circuit_parametric_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass circuit_parametric $(class)
+        @pyclass pymod_circuit_parametric $(class)
         export $(class)
     end
 end
@@ -35,13 +35,13 @@ end
 for func in circuit_parametric_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc circuit_parametric $(func)
+        @pyfunc pymod_circuit_parametric $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(circuit_parametric, pyimport("quri_parts.circuit.circuit_parametric"))
+    copy!(pymod_circuit_parametric, pyimport("quri_parts.circuit.circuit_parametric"))
 end
 
 end

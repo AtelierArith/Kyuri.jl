@@ -1,4 +1,4 @@
-module Bit
+module bit
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const bit = PyNULL()
+const pymod_bit = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("bit_classes.jl")
 for class in bit_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass bit $(class)
+        @pyclass pymod_bit $(class)
         export $(class)
     end
 end
@@ -35,13 +35,13 @@ end
 for func in bit_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc bit $(func)
+        @pyfunc pymod_bit $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(bit, pyimport("quri_parts.core.utils.bit"))
+    copy!(pymod_bit, pyimport("quri_parts.core.utils.bit"))
 end
 
 end

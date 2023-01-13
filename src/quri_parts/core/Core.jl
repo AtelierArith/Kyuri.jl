@@ -1,4 +1,4 @@
-module Core
+module core
 
 using PyCall
 using Reexport
@@ -6,24 +6,24 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const core = PyNULL()
+const pymod_core = PyNULL()
 
 # submodules
 
 
-include("circuit/Circuit.jl")
+include("circuit/circuit.jl")
 
-include("estimator/Estimator.jl")
+include("estimator/estimator.jl")
 
-include("measurement/Measurement.jl")
+include("measurement/measurement.jl")
 
-include("operator/Operator.jl")
+include("operator/operator.jl")
 
-include("sampling/Sampling.jl")
+include("sampling/sampling.jl")
 
-include("state/State.jl")
+include("state/state.jl")
 
-include("utils/Utils.jl")
+include("utils/utils.jl")
 
 
 # customize _ignore_xxx in core_custom.jl as necessary
@@ -41,7 +41,7 @@ include("core_classes.jl")
 for class in core_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass core $(class)
+        @pyclass pymod_core $(class)
         export $(class)
     end
 end
@@ -49,13 +49,13 @@ end
 for func in core_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc core $(func)
+        @pyfunc pymod_core $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(core, pyimport("quri_parts.core"))
+    copy!(pymod_core, pyimport("quri_parts.core"))
 end
 
 end

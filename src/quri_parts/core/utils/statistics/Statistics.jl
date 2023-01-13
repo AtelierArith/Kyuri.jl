@@ -1,4 +1,4 @@
-module Statistics
+module statistics
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const statistics = PyNULL()
+const pymod_statistics = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("statistics_classes.jl")
 for class in statistics_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass statistics $(class)
+        @pyclass pymod_statistics $(class)
         export $(class)
     end
 end
@@ -35,13 +35,13 @@ end
 for func in statistics_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc statistics $(func)
+        @pyfunc pymod_statistics $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(statistics, pyimport("quri_parts.core.utils.statistics"))
+    copy!(pymod_statistics, pyimport("quri_parts.core.utils.statistics"))
 end
 
 end

@@ -1,4 +1,4 @@
-module Pauli_grouping
+module pauli_grouping
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const pauli_grouping = PyNULL()
+const pymod_pauli_grouping = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("pauli_grouping_classes.jl")
 for class in pauli_grouping_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass pauli_grouping $(class)
+        @pyclass pymod_pauli_grouping $(class)
         export $(class)
     end
 end
@@ -35,13 +35,13 @@ end
 for func in pauli_grouping_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc pauli_grouping $(func)
+        @pyfunc pymod_pauli_grouping $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(pauli_grouping, pyimport("quri_parts.core.operator.grouping.pauli_grouping"))
+    copy!(pymod_pauli_grouping, pyimport("quri_parts.core.operator.grouping.pauli_grouping"))
 end
 
 end

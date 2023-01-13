@@ -1,4 +1,4 @@
-module Parameter_mapping
+module parameter_mapping
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const parameter_mapping = PyNULL()
+const pymod_parameter_mapping = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("parameter_mapping_classes.jl")
 for class in parameter_mapping_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass parameter_mapping $(class)
+        @pyclass pymod_parameter_mapping $(class)
         export $(class)
     end
 end
@@ -35,13 +35,13 @@ end
 for func in parameter_mapping_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc parameter_mapping $(func)
+        @pyfunc pymod_parameter_mapping $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(parameter_mapping, pyimport("quri_parts.circuit.parameter_mapping"))
+    copy!(pymod_parameter_mapping, pyimport("quri_parts.circuit.parameter_mapping"))
 end
 
 end

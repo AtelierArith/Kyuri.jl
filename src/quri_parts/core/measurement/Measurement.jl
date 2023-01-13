@@ -1,4 +1,4 @@
-module Measurement
+module measurement
 
 using PyCall
 using Reexport
@@ -6,14 +6,14 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const measurement = PyNULL()
+const pymod_measurement = PyNULL()
 
 # submodules
 
 
-include("bitwise_commuting_pauli/Bitwise_commuting_pauli.jl")
+include("bitwise_commuting_pauli/bitwise_commuting_pauli.jl")
 
-include("interface/Interface.jl")
+include("interface/interface.jl")
 
 
 # customize _ignore_xxx in measurement_custom.jl as necessary
@@ -31,7 +31,7 @@ include("measurement_classes.jl")
 for class in measurement_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass measurement $(class)
+        @pyclass pymod_measurement $(class)
         export $(class)
     end
 end
@@ -39,13 +39,13 @@ end
 for func in measurement_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc measurement $(func)
+        @pyfunc pymod_measurement $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(measurement, pyimport("quri_parts.core.measurement"))
+    copy!(pymod_measurement, pyimport("quri_parts.core.measurement"))
 end
 
 end

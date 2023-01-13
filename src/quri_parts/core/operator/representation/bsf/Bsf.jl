@@ -1,4 +1,4 @@
-module Bsf
+module bsf
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const bsf = PyNULL()
+const pymod_bsf = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("bsf_classes.jl")
 for class in bsf_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass bsf $(class)
+        @pyclass pymod_bsf $(class)
         export $(class)
     end
 end
@@ -35,13 +35,13 @@ end
 for func in bsf_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc bsf $(func)
+        @pyfunc pymod_bsf $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(bsf, pyimport("quri_parts.core.operator.representation.bsf"))
+    copy!(pymod_bsf, pyimport("quri_parts.core.operator.representation.bsf"))
 end
 
 end

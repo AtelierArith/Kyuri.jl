@@ -1,4 +1,4 @@
-module Comp_basis
+module comp_basis
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const comp_basis = PyNULL()
+const pymod_comp_basis = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("comp_basis_classes.jl")
 for class in comp_basis_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass comp_basis $(class)
+        @pyclass pymod_comp_basis $(class)
         export $(class)
     end
 end
@@ -35,13 +35,13 @@ end
 for func in comp_basis_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc comp_basis $(func)
+        @pyfunc pymod_comp_basis $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(comp_basis, pyimport("quri_parts.core.state.comp_basis"))
+    copy!(pymod_comp_basis, pyimport("quri_parts.core.state.comp_basis"))
 end
 
 end

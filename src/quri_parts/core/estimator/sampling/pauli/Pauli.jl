@@ -1,4 +1,4 @@
-module Pauli
+module pauli
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const pauli = PyNULL()
+const pymod_pauli = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("pauli_classes.jl")
 for class in pauli_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass pauli $(class)
+        @pyclass pymod_pauli $(class)
         export $(class)
     end
 end
@@ -35,13 +35,13 @@ end
 for func in pauli_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc pauli $(func)
+        @pyfunc pymod_pauli $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(pauli, pyimport("quri_parts.core.estimator.sampling.pauli"))
+    copy!(pymod_pauli, pyimport("quri_parts.core.estimator.sampling.pauli"))
 end
 
 end

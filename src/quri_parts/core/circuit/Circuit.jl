@@ -1,4 +1,4 @@
-module Circuit
+module circuit
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const circuit = PyNULL()
+const pymod_circuit = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("circuit_classes.jl")
 for class in circuit_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass circuit $(class)
+        @pyclass pymod_circuit $(class)
         export $(class)
     end
 end
@@ -35,13 +35,13 @@ end
 for func in circuit_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc circuit $(func)
+        @pyfunc pymod_circuit $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!(circuit, pyimport("quri_parts.core.circuit"))
+    copy!(pymod_circuit, pyimport("quri_parts.core.circuit"))
 end
 
 end
