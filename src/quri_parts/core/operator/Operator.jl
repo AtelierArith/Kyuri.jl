@@ -3,10 +3,17 @@ module Operator
 using PyCall
 using Reexport
 
+using PyCall
+using Reexport
+
 import ..@pyfunc
 import ..@pyclass
 
 const operator = PyNULL()
+
+# custom file
+include("operator_custom.jl")
+
 
 @static if isfile("operator_custom.jl")
     include("operator_custom.jl")
@@ -15,8 +22,6 @@ end
 # attributes
 include("operator_functions.jl")
 include("operator_classes.jl")
-include("operator_alias_classes.jl")
-include("operator_alias_functions.jl")
 
 for class in operator_classes
     @eval begin
@@ -33,7 +38,7 @@ for func in operator_functions
 end
 
 function __init__()
-    copy!(operator, pyimport("quri_parts.core.operator"))
+    copy!(operator, pyimport("quri_parts.core.operator.operator"))
 end
 
 end
