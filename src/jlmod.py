@@ -16,7 +16,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const {{pymod_base}} = PyNULL()
+const pymod_{{pymod_base}} = PyNULL()
 
 # submodules
 
@@ -39,7 +39,7 @@ include("{{pymod_base}}_classes.jl")
 for class in {{pymod_base}}_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass {{pymod_base}} $(class)
+        @pyclass pymod_{{pymod_base}} $(class)
         export $(class)
     end
 end
@@ -47,13 +47,13 @@ end
 for func in {{pymod_base}}_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc {{pymod_base}} $(func)
+        @pyfunc pymod_{{pymod_base}} $(func)
         export $(func)
     end
 end
 
 function __init__()
-    copy!({{pymod_base}}, pyimport("{{pymod}}"))
+    copy!(pymod_{{pymod_base}}, pyimport("{{pymod}}"))
 end
 
 end
@@ -78,7 +78,7 @@ def write_jlmod(pymod):
                 # avoid loading alias
                 continue
             submod_base = submod_name.split(".")[-1]
-            jlmod_file = submod_base.capitalize() + ".jl"
+            jlmod_file = submod_base + ".jl"
             if submod_name == "quri_parts.core.operator.operator":
                 jlmod_file = "_Operator.jl"
             if submod_name == "quri_parts.core.state.state":
@@ -86,19 +86,19 @@ def write_jlmod(pymod):
             jl_submodules.append(submod_base + "/" + jlmod_file)
 
     pymod_name = pymod.__name__
-    jlmod_name = pymod_name.split('.')[-1].capitalize()
+    jlmod_name = pymod_name.split('.')[-1]
     if pymod_name == "quri_parts.core.operator.operator":
-        jlmod_name = "_Operator"
+        jlmod_name = "_operator"
     if pymod_name == "quri_parts.core.state.state":
-        jlmod_name = "_State"
+        jlmod_name = "_state"
     filename_base = Path(pymod_name.replace(".", "/"))
     os.makedirs(filename_base, exist_ok=True)
-    jlmod_file_path = filename_base.joinpath(filename_base.stem.capitalize() + ".jl")
+    jlmod_file_path = filename_base.joinpath(filename_base.stem + ".jl")
 
-    if str(jlmod_file_path) == "quri_parts/core/operator/operator/Operator.jl":
-        jlmod_file_path = "quri_parts/core/operator/operator/_Operator.jl"
-    if str(jlmod_file_path) == "quri_parts/core/state/state/State.jl":
-        jlmod_file_path = "quri_parts/core/state/state/_State.jl"
+    if str(jlmod_file_path) == "quri_parts/core/operator/operator/operator.jl":
+        jlmod_file_path = "quri_parts/core/operator/operator/_operator.jl"
+    if str(jlmod_file_path) == "quri_parts/core/state/state/state.jl":
+        jlmod_file_path = "quri_parts/core/state/state/_state.jl"
 
     with open(jlmod_file_path, "w") as f:
         template = Template(source=source)
