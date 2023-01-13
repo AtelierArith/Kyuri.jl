@@ -106,6 +106,7 @@ def write_pymod_api(pymod):
                 f.write(4 * WHITE_SPACE + ":" + c + ",\n")
             f.write("]\n")
 
+
 def print_module(pymod="quri_parts", level=0):
     if isinstance(pymod, str):
         pymod = importlib.import_module(f"{pymod}")
