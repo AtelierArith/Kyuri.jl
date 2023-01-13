@@ -91,7 +91,6 @@ def write_pymod_api(pymod):
     pymod_name = pymod.__name__
     pymod_name_base = pymod_name.split(".")[-1]
     filename_base = pymod_name.replace(".", "/")
-    print(pymod_name)
     ret = collect_target_objects(pymod)
     print(f"# --- {pymod_name} ---")
     for (obj_name, objs) in ret.items():
