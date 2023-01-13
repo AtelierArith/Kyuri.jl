@@ -24,6 +24,8 @@ import quri_parts.core.sampling
 import quri_parts.core.state
 import quri_parts.core.utils
 
+from jlmod import write_jlmod
+
 WHITE_SPACE = " "
 MAX_NEXT_LEVEL = 3
 

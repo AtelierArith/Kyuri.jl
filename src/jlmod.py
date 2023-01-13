@@ -52,9 +52,7 @@ end
 
 
 def write_jlmod(pymod: str):
-    filename_base = pymod_name.replace(".", "/")
-    pymod_name = operator.__name__
-    filename_base = Path(pymod_name.replace(".", "/"))
+    filename_base = Path(pymod.replace(".", "/"))
     jlmod_name = filename_base.stem.capitalize() + ".jl"
 
     jlmod_file_path = filename_base.parent.joinpath(jlmod_name)
