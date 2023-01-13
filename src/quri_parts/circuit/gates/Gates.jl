@@ -1,4 +1,4 @@
-module Gates
+module gates
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const gates = PyNULL()
+const pymod_gates = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("gates_classes.jl")
 for class in gates_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass gates $(class)
+        @pyclass pymod_gates $(class)
         export $(class)
     end
 end
@@ -35,13 +35,15 @@ end
 for func in gates_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc gates $(func)
+        @pyfunc pymod_gates $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(gates, pyimport("quri_parts.circuit.gates"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_gates, pyimport("quri_parts.circuit.gates"))
+    end
 end
 
 end

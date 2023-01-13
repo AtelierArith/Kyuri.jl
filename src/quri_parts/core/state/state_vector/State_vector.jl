@@ -1,4 +1,4 @@
-module State_vector
+module state_vector
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const state_vector = PyNULL()
+const pymod_state_vector = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("state_vector_classes.jl")
 for class in state_vector_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass state_vector $(class)
+        @pyclass pymod_state_vector $(class)
         export $(class)
     end
 end
@@ -35,13 +35,15 @@ end
 for func in state_vector_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc state_vector $(func)
+        @pyfunc pymod_state_vector $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(state_vector, pyimport("quri_parts.core.state.state_vector"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_state_vector, pyimport("quri_parts.core.state.state_vector"))
+    end
 end
 
 end

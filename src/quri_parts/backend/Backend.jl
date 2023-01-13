@@ -1,4 +1,4 @@
-module Backend
+module backend
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const backend = PyNULL()
+const pymod_backend = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("backend_classes.jl")
 for class in backend_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass backend $(class)
+        @pyclass pymod_backend $(class)
         export $(class)
     end
 end
@@ -35,13 +35,15 @@ end
 for func in backend_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc backend $(func)
+        @pyfunc pymod_backend $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(backend, pyimport("quri_parts.backend"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_backend, pyimport("quri_parts.backend"))
+    end
 end
 
 end

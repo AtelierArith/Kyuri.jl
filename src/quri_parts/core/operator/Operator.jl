@@ -1,4 +1,4 @@
-module Operator
+module operator
 
 using PyCall
 using Reexport
@@ -6,20 +6,20 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const operator = PyNULL()
+const pymod_operator = PyNULL()
 
 # submodules
 
 
-include("grouping/Grouping.jl")
+include("grouping/grouping.jl")
 
 include("operator/_Operator.jl")
 
-include("pauli/Pauli.jl")
+include("pauli/pauli.jl")
 
-include("representation/Representation.jl")
+include("representation/representation.jl")
 
-include("trotter_suzuki/Trotter_suzuki.jl")
+include("trotter_suzuki/trotter_suzuki.jl")
 
 
 # customize _ignore_xxx in operator_custom.jl as necessary
@@ -37,7 +37,7 @@ include("operator_classes.jl")
 for class in operator_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass operator $(class)
+        @pyclass pymod_operator $(class)
         export $(class)
     end
 end
@@ -45,13 +45,15 @@ end
 for func in operator_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc operator $(func)
+        @pyfunc pymod_operator $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(operator, pyimport("quri_parts.core.operator"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_operator, pyimport("quri_parts.core.operator"))
+    end
 end
 
 end

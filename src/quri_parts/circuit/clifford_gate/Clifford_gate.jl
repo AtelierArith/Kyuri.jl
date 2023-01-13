@@ -1,4 +1,4 @@
-module Clifford_gate
+module clifford_gate
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const clifford_gate = PyNULL()
+const pymod_clifford_gate = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("clifford_gate_classes.jl")
 for class in clifford_gate_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass clifford_gate $(class)
+        @pyclass pymod_clifford_gate $(class)
         export $(class)
     end
 end
@@ -35,13 +35,15 @@ end
 for func in clifford_gate_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc clifford_gate $(func)
+        @pyfunc pymod_clifford_gate $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(clifford_gate, pyimport("quri_parts.circuit.clifford_gate"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_clifford_gate, pyimport("quri_parts.circuit.clifford_gate"))
+    end
 end
 
 end

@@ -1,4 +1,4 @@
-module Trotter_suzuki
+module trotter_suzuki
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const trotter_suzuki = PyNULL()
+const pymod_trotter_suzuki = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("trotter_suzuki_classes.jl")
 for class in trotter_suzuki_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass trotter_suzuki $(class)
+        @pyclass pymod_trotter_suzuki $(class)
         export $(class)
     end
 end
@@ -35,13 +35,15 @@ end
 for func in trotter_suzuki_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc trotter_suzuki $(func)
+        @pyfunc pymod_trotter_suzuki $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(trotter_suzuki, pyimport("quri_parts.core.operator.trotter_suzuki"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_trotter_suzuki, pyimport("quri_parts.core.operator.trotter_suzuki"))
+    end
 end
 
 end

@@ -1,4 +1,4 @@
-module Representation
+module representation
 
 using PyCall
 using Reexport
@@ -6,12 +6,12 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const representation = PyNULL()
+const pymod_representation = PyNULL()
 
 # submodules
 
 
-include("bsf/Bsf.jl")
+include("bsf/bsf.jl")
 
 
 # customize _ignore_xxx in representation_custom.jl as necessary
@@ -29,7 +29,7 @@ include("representation_classes.jl")
 for class in representation_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass representation $(class)
+        @pyclass pymod_representation $(class)
         export $(class)
     end
 end
@@ -37,13 +37,15 @@ end
 for func in representation_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc representation $(func)
+        @pyfunc pymod_representation $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(representation, pyimport("quri_parts.core.operator.representation"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_representation, pyimport("quri_parts.core.operator.representation"))
+    end
 end
 
 end

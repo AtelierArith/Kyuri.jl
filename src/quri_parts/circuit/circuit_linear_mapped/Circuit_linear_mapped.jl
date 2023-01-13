@@ -1,4 +1,4 @@
-module Circuit_linear_mapped
+module circuit_linear_mapped
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const circuit_linear_mapped = PyNULL()
+const pymod_circuit_linear_mapped = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("circuit_linear_mapped_classes.jl")
 for class in circuit_linear_mapped_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass circuit_linear_mapped $(class)
+        @pyclass pymod_circuit_linear_mapped $(class)
         export $(class)
     end
 end
@@ -35,13 +35,15 @@ end
 for func in circuit_linear_mapped_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc circuit_linear_mapped $(func)
+        @pyfunc pymod_circuit_linear_mapped $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(circuit_linear_mapped, pyimport("quri_parts.circuit.circuit_linear_mapped"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_circuit_linear_mapped, pyimport("quri_parts.circuit.circuit_linear_mapped"))
+    end
 end
 
 end

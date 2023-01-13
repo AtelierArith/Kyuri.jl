@@ -1,4 +1,4 @@
-module Bitwise_commuting_pauli
+module bitwise_commuting_pauli
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const bitwise_commuting_pauli = PyNULL()
+const pymod_bitwise_commuting_pauli = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("bitwise_commuting_pauli_classes.jl")
 for class in bitwise_commuting_pauli_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass bitwise_commuting_pauli $(class)
+        @pyclass pymod_bitwise_commuting_pauli $(class)
         export $(class)
     end
 end
@@ -35,13 +35,15 @@ end
 for func in bitwise_commuting_pauli_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc bitwise_commuting_pauli $(func)
+        @pyfunc pymod_bitwise_commuting_pauli $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(bitwise_commuting_pauli, pyimport("quri_parts.core.measurement.bitwise_commuting_pauli"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_bitwise_commuting_pauli, pyimport("quri_parts.core.measurement.bitwise_commuting_pauli"))
+    end
 end
 
 end

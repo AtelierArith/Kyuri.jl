@@ -1,4 +1,4 @@
-module Circuit
+module circuit
 
 using PyCall
 using Reexport
@@ -6,26 +6,26 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const circuit = PyNULL()
+const pymod_circuit = PyNULL()
 
 # submodules
 
 
-include("circuit/Circuit.jl")
+include("circuit/circuit.jl")
 
-include("circuit_linear_mapped/Circuit_linear_mapped.jl")
+include("circuit_linear_mapped/circuit_linear_mapped.jl")
 
-include("circuit_parametric/Circuit_parametric.jl")
+include("circuit_parametric/circuit_parametric.jl")
 
-include("clifford_gate/Clifford_gate.jl")
+include("clifford_gate/clifford_gate.jl")
 
-include("gate/Gate.jl")
+include("gate/gate.jl")
 
-include("gate_names/Gate_names.jl")
+include("gate_names/gate_names.jl")
 
-include("gates/Gates.jl")
+include("gates/gates.jl")
 
-include("parameter_mapping/Parameter_mapping.jl")
+include("parameter_mapping/parameter_mapping.jl")
 
 
 # customize _ignore_xxx in circuit_custom.jl as necessary
@@ -43,7 +43,7 @@ include("circuit_classes.jl")
 for class in circuit_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass circuit $(class)
+        @pyclass pymod_circuit $(class)
         export $(class)
     end
 end
@@ -51,13 +51,15 @@ end
 for func in circuit_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc circuit $(func)
+        @pyfunc pymod_circuit $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(circuit, pyimport("quri_parts.circuit"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_circuit, pyimport("quri_parts.circuit"))
+    end
 end
 
 end

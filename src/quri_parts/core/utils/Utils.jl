@@ -1,4 +1,4 @@
-module Utils
+module utils
 
 using PyCall
 using Reexport
@@ -6,14 +6,14 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const utils = PyNULL()
+const pymod_utils = PyNULL()
 
 # submodules
 
 
-include("bit/Bit.jl")
+include("bit/bit.jl")
 
-include("statistics/Statistics.jl")
+include("statistics/statistics.jl")
 
 
 # customize _ignore_xxx in utils_custom.jl as necessary
@@ -31,7 +31,7 @@ include("utils_classes.jl")
 for class in utils_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass utils $(class)
+        @pyclass pymod_utils $(class)
         export $(class)
     end
 end
@@ -39,13 +39,15 @@ end
 for func in utils_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc utils $(func)
+        @pyfunc pymod_utils $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(utils, pyimport("quri_parts.core.utils"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_utils, pyimport("quri_parts.core.utils"))
+    end
 end
 
 end

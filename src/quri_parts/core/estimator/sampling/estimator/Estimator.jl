@@ -1,4 +1,4 @@
-module Estimator
+module estimator
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const estimator = PyNULL()
+const pymod_estimator = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("estimator_classes.jl")
 for class in estimator_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass estimator $(class)
+        @pyclass pymod_estimator $(class)
         export $(class)
     end
 end
@@ -35,13 +35,15 @@ end
 for func in estimator_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc estimator $(func)
+        @pyfunc pymod_estimator $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(estimator, pyimport("quri_parts.core.estimator.sampling.estimator"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_estimator, pyimport("quri_parts.core.estimator.sampling.estimator"))
+    end
 end
 
 end

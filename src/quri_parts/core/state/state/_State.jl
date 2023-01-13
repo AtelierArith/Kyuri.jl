@@ -1,4 +1,4 @@
-module _State
+module _state
 
 using PyCall
 using Reexport
@@ -6,7 +6,7 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const state = PyNULL()
+const pymod_state = PyNULL()
 
 # submodules
 
@@ -27,7 +27,7 @@ include("state_classes.jl")
 for class in state_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass state $(class)
+        @pyclass pymod_state $(class)
         export $(class)
     end
 end
@@ -35,13 +35,15 @@ end
 for func in state_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc state $(func)
+        @pyfunc pymod_state $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(state, pyimport("quri_parts.core.state.state"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_state, pyimport("quri_parts.core.state.state"))
+    end
 end
 
 end

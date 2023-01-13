@@ -1,4 +1,4 @@
-module Sampling
+module sampling
 
 using PyCall
 using Reexport
@@ -6,14 +6,14 @@ using Reexport
 import ..@pyfunc
 import ..@pyclass
 
-const sampling = PyNULL()
+const pymod_sampling = PyNULL()
 
 # submodules
 
 
-include("estimator/Estimator.jl")
+include("estimator/estimator.jl")
 
-include("pauli/Pauli.jl")
+include("pauli/pauli.jl")
 
 
 # customize _ignore_xxx in sampling_custom.jl as necessary
@@ -31,7 +31,7 @@ include("sampling_classes.jl")
 for class in sampling_classes
     class in _ignore_classes && continue
     @eval begin
-        @pyclass sampling $(class)
+        @pyclass pymod_sampling $(class)
         export $(class)
     end
 end
@@ -39,13 +39,15 @@ end
 for func in sampling_functions
     func in _ignore_functions && continue
     @eval begin
-        @pyfunc sampling $(func)
+        @pyfunc pymod_sampling $(func)
         export $(func)
     end
 end
 
-function __init__()
-    copy!(sampling, pyimport("quri_parts.core.estimator.sampling"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_sampling, pyimport("quri_parts.core.estimator.sampling"))
+    end
 end
 
 end
