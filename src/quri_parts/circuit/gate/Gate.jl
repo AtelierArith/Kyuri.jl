@@ -40,8 +40,10 @@ for func in gate_functions
     end
 end
 
-function __init__()
-    copy!(pymod_gate, pyimport("quri_parts.circuit.gate"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_gate, pyimport("quri_parts.circuit.gate"))
+    end
 end
 
 end

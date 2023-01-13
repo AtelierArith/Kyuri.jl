@@ -56,8 +56,10 @@ for func in circuit_functions
     end
 end
 
-function __init__()
-    copy!(pymod_circuit, pyimport("quri_parts.circuit"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_circuit, pyimport("quri_parts.circuit"))
+    end
 end
 
 end

@@ -40,8 +40,10 @@ for func in statistics_functions
     end
 end
 
-function __init__()
-    copy!(pymod_statistics, pyimport("quri_parts.core.utils.statistics"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_statistics, pyimport("quri_parts.core.utils.statistics"))
+    end
 end
 
 end

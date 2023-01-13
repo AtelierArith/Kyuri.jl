@@ -40,8 +40,10 @@ for func in sampling_functions
     end
 end
 
-function __init__()
-    copy!(pymod_sampling, pyimport("quri_parts.core.sampling"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_sampling, pyimport("quri_parts.core.sampling"))
+    end
 end
 
 end

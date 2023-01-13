@@ -42,8 +42,10 @@ for func in representation_functions
     end
 end
 
-function __init__()
-    copy!(pymod_representation, pyimport("quri_parts.core.operator.representation"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_representation, pyimport("quri_parts.core.operator.representation"))
+    end
 end
 
 end

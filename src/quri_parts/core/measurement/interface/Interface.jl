@@ -40,8 +40,10 @@ for func in interface_functions
     end
 end
 
-function __init__()
-    copy!(pymod_interface, pyimport("quri_parts.core.measurement.interface"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_interface, pyimport("quri_parts.core.measurement.interface"))
+    end
 end
 
 end

@@ -40,8 +40,10 @@ for func in state_parametric_functions
     end
 end
 
-function __init__()
-    copy!(pymod_state_parametric, pyimport("quri_parts.core.state.state_parametric"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_state_parametric, pyimport("quri_parts.core.state.state_parametric"))
+    end
 end
 
 end

@@ -50,8 +50,10 @@ for func in operator_functions
     end
 end
 
-function __init__()
-    copy!(pymod_operator, pyimport("quri_parts.core.operator"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_operator, pyimport("quri_parts.core.operator"))
+    end
 end
 
 end

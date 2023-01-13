@@ -54,8 +54,10 @@ for func in core_functions
     end
 end
 
-function __init__()
-    copy!(pymod_core, pyimport("quri_parts.core"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_core, pyimport("quri_parts.core"))
+    end
 end
 
 end

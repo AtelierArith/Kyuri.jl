@@ -44,8 +44,10 @@ for func in measurement_functions
     end
 end
 
-function __init__()
-    copy!(pymod_measurement, pyimport("quri_parts.core.measurement"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_measurement, pyimport("quri_parts.core.measurement"))
+    end
 end
 
 end

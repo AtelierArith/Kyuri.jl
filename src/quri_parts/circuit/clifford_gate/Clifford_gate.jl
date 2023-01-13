@@ -40,8 +40,10 @@ for func in clifford_gate_functions
     end
 end
 
-function __init__()
-    copy!(pymod_clifford_gate, pyimport("quri_parts.circuit.clifford_gate"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_clifford_gate, pyimport("quri_parts.circuit.clifford_gate"))
+    end
 end
 
 end

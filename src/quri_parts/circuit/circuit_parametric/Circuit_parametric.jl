@@ -40,8 +40,10 @@ for func in circuit_parametric_functions
     end
 end
 
-function __init__()
-    copy!(pymod_circuit_parametric, pyimport("quri_parts.circuit.circuit_parametric"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_circuit_parametric, pyimport("quri_parts.circuit.circuit_parametric"))
+    end
 end
 
 end

@@ -40,8 +40,10 @@ for func in trotter_suzuki_functions
     end
 end
 
-function __init__()
-    copy!(pymod_trotter_suzuki, pyimport("quri_parts.core.operator.trotter_suzuki"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_trotter_suzuki, pyimport("quri_parts.core.operator.trotter_suzuki"))
+    end
 end
 
 end

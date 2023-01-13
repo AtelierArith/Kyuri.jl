@@ -44,8 +44,10 @@ for func in utils_functions
     end
 end
 
-function __init__()
-    copy!(pymod_utils, pyimport("quri_parts.core.utils"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_utils, pyimport("quri_parts.core.utils"))
+    end
 end
 
 end

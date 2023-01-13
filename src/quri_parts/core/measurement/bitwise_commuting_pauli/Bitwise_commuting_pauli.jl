@@ -40,8 +40,10 @@ for func in bitwise_commuting_pauli_functions
     end
 end
 
-function __init__()
-    copy!(pymod_bitwise_commuting_pauli, pyimport("quri_parts.core.measurement.bitwise_commuting_pauli"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_bitwise_commuting_pauli, pyimport("quri_parts.core.measurement.bitwise_commuting_pauli"))
+    end
 end
 
 end

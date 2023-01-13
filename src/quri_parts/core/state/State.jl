@@ -50,8 +50,10 @@ for func in state_functions
     end
 end
 
-function __init__()
-    copy!(pymod_state, pyimport("quri_parts.core.state"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_state, pyimport("quri_parts.core.state"))
+    end
 end
 
 end

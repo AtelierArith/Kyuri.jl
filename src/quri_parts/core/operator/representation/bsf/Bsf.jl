@@ -40,8 +40,10 @@ for func in bsf_functions
     end
 end
 
-function __init__()
-    copy!(pymod_bsf, pyimport("quri_parts.core.operator.representation.bsf"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_bsf, pyimport("quri_parts.core.operator.representation.bsf"))
+    end
 end
 
 end

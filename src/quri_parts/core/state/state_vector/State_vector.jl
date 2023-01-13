@@ -40,8 +40,10 @@ for func in state_vector_functions
     end
 end
 
-function __init__()
-    copy!(pymod_state_vector, pyimport("quri_parts.core.state.state_vector"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_state_vector, pyimport("quri_parts.core.state.state_vector"))
+    end
 end
 
 end

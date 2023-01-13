@@ -40,8 +40,10 @@ for func in pauli_functions
     end
 end
 
-function __init__()
-    copy!(pymod_pauli, pyimport("quri_parts.core.operator.pauli"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_pauli, pyimport("quri_parts.core.operator.pauli"))
+    end
 end
 
 end

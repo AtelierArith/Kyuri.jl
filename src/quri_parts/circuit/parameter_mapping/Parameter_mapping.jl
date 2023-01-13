@@ -40,8 +40,10 @@ for func in parameter_mapping_functions
     end
 end
 
-function __init__()
-    copy!(pymod_parameter_mapping, pyimport("quri_parts.circuit.parameter_mapping"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_parameter_mapping, pyimport("quri_parts.circuit.parameter_mapping"))
+    end
 end
 
 end

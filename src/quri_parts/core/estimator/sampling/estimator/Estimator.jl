@@ -40,8 +40,10 @@ for func in estimator_functions
     end
 end
 
-function __init__()
-    copy!(pymod_estimator, pyimport("quri_parts.core.estimator.sampling.estimator"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_estimator, pyimport("quri_parts.core.estimator.sampling.estimator"))
+    end
 end
 
 end

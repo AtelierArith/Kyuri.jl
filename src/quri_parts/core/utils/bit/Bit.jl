@@ -40,8 +40,10 @@ for func in bit_functions
     end
 end
 
-function __init__()
-    copy!(pymod_bit, pyimport("quri_parts.core.utils.bit"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_bit, pyimport("quri_parts.core.utils.bit"))
+    end
 end
 
 end

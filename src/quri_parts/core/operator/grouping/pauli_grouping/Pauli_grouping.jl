@@ -40,8 +40,10 @@ for func in pauli_grouping_functions
     end
 end
 
-function __init__()
-    copy!(pymod_pauli_grouping, pyimport("quri_parts.core.operator.grouping.pauli_grouping"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_pauli_grouping, pyimport("quri_parts.core.operator.grouping.pauli_grouping"))
+    end
 end
 
 end

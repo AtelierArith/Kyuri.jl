@@ -42,8 +42,10 @@ for func in grouping_functions
     end
 end
 
-function __init__()
-    copy!(pymod_grouping, pyimport("quri_parts.core.operator.grouping"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_grouping, pyimport("quri_parts.core.operator.grouping"))
+    end
 end
 
 end

@@ -40,8 +40,10 @@ for func in circuit_linear_mapped_functions
     end
 end
 
-function __init__()
-    copy!(pymod_circuit_linear_mapped, pyimport("quri_parts.circuit.circuit_linear_mapped"))
+if !isdefined(@__MODULE__, :__init__)
+    @eval function __init__()
+        copy!(pymod_circuit_linear_mapped, pyimport("quri_parts.circuit.circuit_linear_mapped"))
+    end
 end
 
 end
