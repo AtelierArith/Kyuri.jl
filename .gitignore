@@ -1,0 +1,9 @@
+*.gif
+*.ipynb
+__pycache__
+.DS_Store
+.ipynb_checkpoints
+/Manifest.toml
+/docs/build/
+docs/build/
+docs/site/
