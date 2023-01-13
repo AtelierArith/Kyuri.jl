@@ -91,13 +91,13 @@ def write_pymod_api(pymod):
     pymod_name = pymod.__name__
     pymod_name_base = pymod_name.split(".")[-1]
     filename_base = pymod_name.replace(".", "/")
+    os.makedirs(filename_base, exist_ok=True)
     ret = collect_target_objects(pymod)
     print(f"# --- {pymod_name} ---")
     for (obj_name, objs) in ret.items():
         jlfile_name = os.path.join(
             filename_base, pymod_name_base + "_" + obj_name + ".jl"
         )
-        os.makedirs(filename_base, exist_ok=True)
         with open(jlfile_name, "w") as f:
             f.write(f"# --- {filename_base}_{obj_name}.jl\n")
             f.write(f"const {pymod_name_base}_{obj_name} = [\n")
