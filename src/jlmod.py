@@ -24,7 +24,11 @@ const {{pymod_base}} = PyNULL()
 include("{{submod}}")
 {% endfor %}
 
-@static if isfile("{{pymod_base}}_custom.jl")
+# customize _ignore_xxx in {{pymod_base}}_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "{{pymod_base}}_custom.jl"))
     include("{{pymod_base}}_custom.jl")
 end
 
@@ -33,6 +37,7 @@ include("{{pymod_base}}_functions.jl")
 include("{{pymod_base}}_classes.jl")
 
 for class in {{pymod_base}}_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass {{pymod_base}} $(class)
         export $(class)
@@ -40,6 +45,7 @@ for class in {{pymod_base}}_classes
 end
 
 for func in {{pymod_base}}_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc {{pymod_base}} $(func)
         export $(func)
