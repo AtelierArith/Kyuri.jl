@@ -28,7 +28,6 @@ import quri_parts.core.utils
 from jlmod import write_jlmod
 
 WHITE_SPACE = " "
-MAX_NEXT_LEVEL = 7
 
 
 def collect_target_objects(pymod):
@@ -123,8 +122,6 @@ def print_module(pymod="quri_parts", level=0):
                 continue
             indent = 4 * level * WHITE_SPACE
             submod_name = attr.__name__
-            if level + 1 > MAX_NEXT_LEVEL:
-                continue
             if submod_name.split(".")[-1] in ["numpy", "array"]:
                 continue
             print(indent + f"# --- print-module-{attr.__name__} ---")
@@ -147,8 +144,6 @@ def generate_api(pymod="quri_parts", level=0):
                 continue
             indent = 4 * level * WHITE_SPACE
             submod_name = attr.__name__
-            if level + 1 > MAX_NEXT_LEVEL:
-                continue
             if submod_name.split(".")[0] in ["numpy", "array"]:
                 continue
             if submod_name.split(".")[-1] in ["numpy", "array"]:
