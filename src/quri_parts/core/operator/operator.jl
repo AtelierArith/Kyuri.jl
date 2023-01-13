@@ -13,7 +13,7 @@ const pymod_operator = PyNULL()
 
 include("grouping/grouping.jl")
 
-include("operator/_Operator.jl")
+include("operator/_operator.jl")
 
 include("pauli/pauli.jl")
 

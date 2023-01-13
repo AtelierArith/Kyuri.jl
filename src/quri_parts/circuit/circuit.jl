@@ -11,7 +11,7 @@ const pymod_circuit = PyNULL()
 # submodules
 
 
-include("circuit/circuit.jl")
+include("circuit/_circuit.jl")
 
 include("circuit_linear_mapped/circuit_linear_mapped.jl")
 
