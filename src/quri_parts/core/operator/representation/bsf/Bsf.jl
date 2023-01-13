@@ -12,7 +12,11 @@ const bsf = PyNULL()
 
 
 
-@static if isfile("bsf_custom.jl")
+# customize _ignore_xxx in bsf_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "bsf_custom.jl"))
     include("bsf_custom.jl")
 end
 
@@ -21,6 +25,7 @@ include("bsf_functions.jl")
 include("bsf_classes.jl")
 
 for class in bsf_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass bsf $(class)
         export $(class)
@@ -28,6 +33,7 @@ for class in bsf_classes
 end
 
 for func in bsf_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc bsf $(func)
         export $(func)

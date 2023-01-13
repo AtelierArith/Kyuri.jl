@@ -12,7 +12,11 @@ const trotter_suzuki = PyNULL()
 
 
 
-@static if isfile("trotter_suzuki_custom.jl")
+# customize _ignore_xxx in trotter_suzuki_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "trotter_suzuki_custom.jl"))
     include("trotter_suzuki_custom.jl")
 end
 
@@ -21,6 +25,7 @@ include("trotter_suzuki_functions.jl")
 include("trotter_suzuki_classes.jl")
 
 for class in trotter_suzuki_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass trotter_suzuki $(class)
         export $(class)
@@ -28,6 +33,7 @@ for class in trotter_suzuki_classes
 end
 
 for func in trotter_suzuki_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc trotter_suzuki $(func)
         export $(func)

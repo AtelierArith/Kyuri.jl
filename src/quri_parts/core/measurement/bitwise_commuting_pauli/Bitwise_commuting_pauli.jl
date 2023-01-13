@@ -12,7 +12,11 @@ const bitwise_commuting_pauli = PyNULL()
 
 
 
-@static if isfile("bitwise_commuting_pauli_custom.jl")
+# customize _ignore_xxx in bitwise_commuting_pauli_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "bitwise_commuting_pauli_custom.jl"))
     include("bitwise_commuting_pauli_custom.jl")
 end
 
@@ -21,6 +25,7 @@ include("bitwise_commuting_pauli_functions.jl")
 include("bitwise_commuting_pauli_classes.jl")
 
 for class in bitwise_commuting_pauli_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass bitwise_commuting_pauli $(class)
         export $(class)
@@ -28,6 +33,7 @@ for class in bitwise_commuting_pauli_classes
 end
 
 for func in bitwise_commuting_pauli_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc bitwise_commuting_pauli $(func)
         export $(func)

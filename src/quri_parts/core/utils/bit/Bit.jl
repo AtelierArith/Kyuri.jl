@@ -12,7 +12,11 @@ const bit = PyNULL()
 
 
 
-@static if isfile("bit_custom.jl")
+# customize _ignore_xxx in bit_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "bit_custom.jl"))
     include("bit_custom.jl")
 end
 
@@ -21,6 +25,7 @@ include("bit_functions.jl")
 include("bit_classes.jl")
 
 for class in bit_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass bit $(class)
         export $(class)
@@ -28,6 +33,7 @@ for class in bit_classes
 end
 
 for func in bit_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc bit $(func)
         export $(func)

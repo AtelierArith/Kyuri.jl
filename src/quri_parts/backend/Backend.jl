@@ -12,7 +12,11 @@ const backend = PyNULL()
 
 
 
-@static if isfile("backend_custom.jl")
+# customize _ignore_xxx in backend_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "backend_custom.jl"))
     include("backend_custom.jl")
 end
 
@@ -21,6 +25,7 @@ include("backend_functions.jl")
 include("backend_classes.jl")
 
 for class in backend_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass backend $(class)
         export $(class)
@@ -28,6 +33,7 @@ for class in backend_classes
 end
 
 for func in backend_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc backend $(func)
         export $(func)

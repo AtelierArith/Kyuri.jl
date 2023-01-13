@@ -28,7 +28,11 @@ include("gates/Gates.jl")
 include("parameter_mapping/Parameter_mapping.jl")
 
 
-@static if isfile("circuit_custom.jl")
+# customize _ignore_xxx in circuit_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "circuit_custom.jl"))
     include("circuit_custom.jl")
 end
 
@@ -37,6 +41,7 @@ include("circuit_functions.jl")
 include("circuit_classes.jl")
 
 for class in circuit_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass circuit $(class)
         export $(class)
@@ -44,6 +49,7 @@ for class in circuit_classes
 end
 
 for func in circuit_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc circuit $(func)
         export $(func)

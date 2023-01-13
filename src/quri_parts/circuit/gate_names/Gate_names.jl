@@ -12,7 +12,11 @@ const gate_names = PyNULL()
 
 
 
-@static if isfile("gate_names_custom.jl")
+# customize _ignore_xxx in gate_names_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "gate_names_custom.jl"))
     include("gate_names_custom.jl")
 end
 
@@ -21,6 +25,7 @@ include("gate_names_functions.jl")
 include("gate_names_classes.jl")
 
 for class in gate_names_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass gate_names $(class)
         export $(class)
@@ -28,6 +33,7 @@ for class in gate_names_classes
 end
 
 for func in gate_names_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc gate_names $(func)
         export $(func)

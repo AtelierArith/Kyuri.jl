@@ -12,7 +12,11 @@ const interface = PyNULL()
 
 
 
-@static if isfile("interface_custom.jl")
+# customize _ignore_xxx in interface_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "interface_custom.jl"))
     include("interface_custom.jl")
 end
 
@@ -21,6 +25,7 @@ include("interface_functions.jl")
 include("interface_classes.jl")
 
 for class in interface_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass interface $(class)
         export $(class)
@@ -28,6 +33,7 @@ for class in interface_classes
 end
 
 for func in interface_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc interface $(func)
         export $(func)

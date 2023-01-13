@@ -12,7 +12,11 @@ const statistics = PyNULL()
 
 
 
-@static if isfile("statistics_custom.jl")
+# customize _ignore_xxx in statistics_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "statistics_custom.jl"))
     include("statistics_custom.jl")
 end
 
@@ -21,6 +25,7 @@ include("statistics_functions.jl")
 include("statistics_classes.jl")
 
 for class in statistics_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass statistics $(class)
         export $(class)
@@ -28,6 +33,7 @@ for class in statistics_classes
 end
 
 for func in statistics_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc statistics $(func)
         export $(func)

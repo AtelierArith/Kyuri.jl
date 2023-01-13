@@ -12,7 +12,11 @@ const comp_basis = PyNULL()
 
 
 
-@static if isfile("comp_basis_custom.jl")
+# customize _ignore_xxx in comp_basis_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "comp_basis_custom.jl"))
     include("comp_basis_custom.jl")
 end
 
@@ -21,6 +25,7 @@ include("comp_basis_functions.jl")
 include("comp_basis_classes.jl")
 
 for class in comp_basis_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass comp_basis $(class)
         export $(class)
@@ -28,6 +33,7 @@ for class in comp_basis_classes
 end
 
 for func in comp_basis_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc comp_basis $(func)
         export $(func)

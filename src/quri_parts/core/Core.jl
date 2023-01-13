@@ -26,7 +26,11 @@ include("state/State.jl")
 include("utils/Utils.jl")
 
 
-@static if isfile("core_custom.jl")
+# customize _ignore_xxx in core_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "core_custom.jl"))
     include("core_custom.jl")
 end
 
@@ -35,6 +39,7 @@ include("core_functions.jl")
 include("core_classes.jl")
 
 for class in core_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass core $(class)
         export $(class)
@@ -42,6 +47,7 @@ for class in core_classes
 end
 
 for func in core_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc core $(func)
         export $(func)

@@ -22,7 +22,11 @@ include("state_vector/State_vector.jl")
 include("state_vector_parametric/State_vector_parametric.jl")
 
 
-@static if isfile("state_custom.jl")
+# customize _ignore_xxx in state_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "state_custom.jl"))
     include("state_custom.jl")
 end
 
@@ -31,6 +35,7 @@ include("state_functions.jl")
 include("state_classes.jl")
 
 for class in state_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass state $(class)
         export $(class)
@@ -38,6 +43,7 @@ for class in state_classes
 end
 
 for func in state_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc state $(func)
         export $(func)

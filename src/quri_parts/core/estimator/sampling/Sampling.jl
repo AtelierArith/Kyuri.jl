@@ -16,7 +16,11 @@ include("estimator/Estimator.jl")
 include("pauli/Pauli.jl")
 
 
-@static if isfile("sampling_custom.jl")
+# customize _ignore_xxx in sampling_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "sampling_custom.jl"))
     include("sampling_custom.jl")
 end
 
@@ -25,6 +29,7 @@ include("sampling_functions.jl")
 include("sampling_classes.jl")
 
 for class in sampling_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass sampling $(class)
         export $(class)
@@ -32,6 +37,7 @@ for class in sampling_classes
 end
 
 for func in sampling_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc sampling $(func)
         export $(func)

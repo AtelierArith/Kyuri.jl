@@ -22,7 +22,11 @@ include("representation/Representation.jl")
 include("trotter_suzuki/Trotter_suzuki.jl")
 
 
-@static if isfile("operator_custom.jl")
+# customize _ignore_xxx in operator_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "operator_custom.jl"))
     include("operator_custom.jl")
 end
 
@@ -31,6 +35,7 @@ include("operator_functions.jl")
 include("operator_classes.jl")
 
 for class in operator_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass operator $(class)
         export $(class)
@@ -38,6 +43,7 @@ for class in operator_classes
 end
 
 for func in operator_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc operator $(func)
         export $(func)

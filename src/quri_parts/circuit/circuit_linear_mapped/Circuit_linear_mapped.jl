@@ -12,7 +12,11 @@ const circuit_linear_mapped = PyNULL()
 
 
 
-@static if isfile("circuit_linear_mapped_custom.jl")
+# customize _ignore_xxx in circuit_linear_mapped_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "circuit_linear_mapped_custom.jl"))
     include("circuit_linear_mapped_custom.jl")
 end
 
@@ -21,6 +25,7 @@ include("circuit_linear_mapped_functions.jl")
 include("circuit_linear_mapped_classes.jl")
 
 for class in circuit_linear_mapped_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass circuit_linear_mapped $(class)
         export $(class)
@@ -28,6 +33,7 @@ for class in circuit_linear_mapped_classes
 end
 
 for func in circuit_linear_mapped_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc circuit_linear_mapped $(func)
         export $(func)

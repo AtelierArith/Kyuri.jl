@@ -14,7 +14,11 @@ const grouping = PyNULL()
 include("pauli_grouping/Pauli_grouping.jl")
 
 
-@static if isfile("grouping_custom.jl")
+# customize _ignore_xxx in grouping_custom.jl as necessary
+_ignore_classes = Symbol[]
+_ignore_functions = Symbol[]
+
+@static if isfile(joinpath(@__DIR__, "grouping_custom.jl"))
     include("grouping_custom.jl")
 end
 
@@ -23,6 +27,7 @@ include("grouping_functions.jl")
 include("grouping_classes.jl")
 
 for class in grouping_classes
+    class in _ignore_classes && continue
     @eval begin
         @pyclass grouping $(class)
         export $(class)
@@ -30,6 +35,7 @@ for class in grouping_classes
 end
 
 for func in grouping_functions
+    func in _ignore_functions && continue
     @eval begin
         @pyfunc grouping $(func)
         export $(func)
