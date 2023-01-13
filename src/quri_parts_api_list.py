@@ -147,3 +147,4 @@ def generate_api(pymod="quri_parts", level=0):
                 continue
             generate_api(pymod=pymod_name, level=level + 1)
             write_pymod_api(pymod=pymod_name)
+            write_jlmod(pymod=pymod_name)
