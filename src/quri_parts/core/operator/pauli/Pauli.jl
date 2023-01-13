@@ -8,11 +8,17 @@ import ..@pyclass
 
 const pauli = PyNULL()
 
+# submodules
+
+
+
+@static if isfile("pauli_custom.jl")
+    include("pauli_custom.jl")
+end
+
 # attributes
 include("pauli_functions.jl")
 include("pauli_classes.jl")
-include("pauli_alias_classes.jl")
-include("pauli_alias_functions.jl")
 
 for class in pauli_classes
     @eval begin

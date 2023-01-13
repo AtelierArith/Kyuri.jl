@@ -9,24 +9,41 @@ import ..@pyclass
 const core = PyNULL()
 
 # submodules
+
+
+include("circuit/Circuit.jl")
+
+include("estimator/Estimator.jl")
+
+include("measurement/Measurement.jl")
+
 include("operator/Operator.jl")
+
+include("sampling/Sampling.jl")
+
+include("state/State.jl")
+
+include("utils/Utils.jl")
+
+
+@static if isfile("core_custom.jl")
+    include("core_custom.jl")
+end
 
 # attributes
 include("core_functions.jl")
 include("core_classes.jl")
-include("core_alias_classes.jl")
-include("core_alias_functions.jl")
 
 for class in core_classes
     @eval begin
-        @pyclass qulacs $(class)
+        @pyclass core $(class)
         export $(class)
     end
 end
 
 for func in core_functions
     @eval begin
-        @pyfunc operator $(func)
+        @pyfunc core $(func)
         export $(func)
     end
 end
